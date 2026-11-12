@@ -64,7 +64,7 @@ class Command(BaseCommand):
         settings.tour_price = "1350$"
         settings.hotel_name_uz = "5* mehmonxona - Gashalti Health Naftalan"
         settings.hotel_name_ru = "5* отель - Gashalti Health Naftalan"
-        settings.phone_number = "+998919686886"
+        settings.phone_number = "+998994111151"
         settings.phone_number_2 = "+998974111151"
         settings.operator_name = "Abduqodir"
         settings.telegram_url = "https://t.me/khalilov1999"
@@ -284,16 +284,54 @@ class Command(BaseCommand):
                 photo.image.save(f"sample_{order}.jpg", img_file, save=True)
             self.stdout.write(self.style.SUCCESS("Galereya rasmlari yaratildi."))
 
-        # 8. Test Lead (Namuna uchun)
-        if not Lead.objects.exists():
-            Lead.objects.create(
-                name="Sardor Rahimqulov",
-                phone="+998901234567",
-                message="Ota-onam uchun 2 kishilik sayohat va davolanish paketini bilmoqchi edim.",
-                source="accordion_form",
-                status="new",
-                operator_notes="Birinchi aloqa o'rnatilishi kutilmoqda."
-            )
-            self.stdout.write(self.style.SUCCESS("Namunaviy lead yaratildi."))
+        # 8. Test Leadlar (Videodagi 5 ta ariza)
+        if Lead.objects.count() < 5:
+            Lead.objects.all().delete()
+            sample_leads = [
+                {
+                    "name": "Jasurbek",
+                    "phone": "+998 (99) 893-55-54",
+                    "message": "",
+                    "source": "landing_form",
+                    "status": "new",
+                },
+                {
+                    "name": "Jasurbek",
+                    "phone": "+998 (99) 893-55-54",
+                    "message": "",
+                    "source": "landing_form",
+                    "status": "new",
+                },
+                {
+                    "name": "Muzaffar Xamidov",
+                    "phone": "+998 (99) 890-11-12",
+                    "message": "Ota-onam uchun 2 kishilik sayohat haqida ma'lumot bering",
+                    "source": "landing_form",
+                    "status": "new",
+                },
+                {
+                    "name": "Bekzod Rahimov",
+                    "phone": "+998901234567",
+                    "message": "Ozarbayjon Naftalan sayohati haqida ma'lumot bering",
+                    "source": "landing_form",
+                    "status": "new",
+                },
+                {
+                    "name": "Sardor Rahimqulov",
+                    "phone": "+998901234567",
+                    "message": "Ota-onam uchun 2 kishilik sayohat va davolanish paketini bilmoqchi edim",
+                    "source": "landing_form",
+                    "status": "new",
+                },
+            ]
+            for l_data in sample_leads:
+                Lead.objects.create(
+                    name=l_data["name"],
+                    phone=l_data["phone"],
+                    message=l_data["message"],
+                    source=l_data["source"],
+                    status=l_data["status"],
+                )
+            self.stdout.write(self.style.SUCCESS("Videodagi 5 ta namunaviy lead yaratildi."))
 
         self.stdout.write(self.style.SUCCESS("Barcha boshlang'ich ma'lumotlar muvaffaqiyatli tayyorlandi!"))

@@ -31,65 +31,73 @@
     </div>
 
     <ul class="sidebar-menu">
-      <li class="menu-label">Asosiy</li>
+      <li class="menu-label">ASOSIY</li>
       <li class="menu-item {% if active_menu == 'home' %}active{% endif %}">
         <a href="{% url 'dashboard_home' %}">
-          <i class="fas fa-home"></i>
-          <span>Boshqaruv & Arizalar</span>
-          {% if new_leads_count %}
-            <span class="sidebar-badge">{{ new_leads_count }} yangi</span>
-          {% endif %}
+          <i class="fas fa-chart-pie"></i>
+          <span>Dashboard</span>
         </a>
       </li>
 
       <li class="menu-item {% if active_menu == 'leads' %}active{% endif %}">
         <a href="{% url 'dashboard_leads' %}">
           <i class="fas fa-headset"></i>
-          <span>Mijozlar Bilan Muloqot (Leadlar)</span>
+          <span>Arizalar (Leadlar)</span>
+          {% if new_leads_count %}
+            <span class="sidebar-badge">{{ new_leads_count }} yangi</span>
+          {% endif %}
         </a>
       </li>
 
-      <li class="menu-label">Punktlarni Tahrirlash</li>
+      <li class="menu-label">LANDING PAGE KONTENTI</li>
       <li class="menu-item {% if active_menu == 'settings' %}active{% endif %}">
         <a href="{% url 'dashboard_settings' %}">
           <i class="fas fa-sliders-h"></i>
-          <span>2-punkt & Aloqa: Narx & Telefon</span>
-        </a>
-      </li>
-
-      <li class="menu-item {% if active_menu == 'features' %}active{% endif %}">
-        <a href="{% url 'dashboard_features' %}">
-          <i class="fas fa-hotel"></i>
-          <span>1-punkt: Dastur & Xizmatlar</span>
-        </a>
-      </li>
-
-      <li class="menu-item {% if active_menu == 'gallery' %}active{% endif %}">
-        <a href="{% url 'dashboard_gallery' %}">
-          <i class="fas fa-photo-video"></i>
-          <span>3-punkt: Rasmlar & Videolar</span>
+          <span>Bosh sahifa & Hero</span>
         </a>
       </li>
 
       <li class="menu-item {% if active_menu == 'diseases' %}active{% endif %}">
         <a href="{% url 'dashboard_diseases' %}">
           <i class="fas fa-heartbeat"></i>
-          <span>4-punkt: Qanday kasalliklar</span>
+          <span>Kasalliklar bo'limi</span>
         </a>
       </li>
 
       <li class="menu-item {% if active_menu == 'treatments' %}active{% endif %}">
         <a href="{% url 'dashboard_treatments' %}">
           <i class="fas fa-notes-medical"></i>
-          <span>5-punkt: Davolanish turlari</span>
+          <span>Davolanish turlari</span>
         </a>
       </li>
 
-      <li class="menu-label">Sayt</li>
+      <li class="menu-item {% if active_menu == 'features' %}active{% endif %}">
+        <a href="{% url 'dashboard_features' %}">
+          <i class="fas fa-hotel"></i>
+          <span>Sayohat qulayliklari</span>
+        </a>
+      </li>
+
+      <li class="menu-item {% if active_menu == 'gallery' %}active{% endif %}">
+        <a href="{% url 'dashboard_gallery' %}">
+          <i class="fas fa-images"></i>
+          <span>Galereya rasmlari</span>
+        </a>
+      </li>
+
+      <li class="menu-label">TIZIM</li>
+      <li class="menu-item">
+        <a href="/admin/" target="_blank">
+          <i class="fas fa-shield-alt"></i>
+          <span>Django Default Admin</span>
+          <i class="fas fa-external-link-alt" style="margin-left: auto; font-size: 11px; opacity: 0.7;"></i>
+        </a>
+      </li>
       <li class="menu-item">
         <a href="{% url 'landing_page' %}" target="_blank">
-          <i class="fas fa-external-link-alt"></i>
-          <span>Saytni Ko'rish</span>
+          <i class="fas fa-globe"></i>
+          <span>Saytni ko'rish</span>
+          <i class="fas fa-external-link-alt" style="margin-left: auto; font-size: 11px; opacity: 0.7;"></i>
         </a>
       </li>
     </ul>

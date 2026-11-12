@@ -170,6 +170,10 @@ class SiteSettings(models.Model):
         return settings
 
     # Helper getters for active language
+    @property
+    def flight_dates(self):
+        return self.flight_dates_uz
+
     def get_title(self, lang='uz'):
         return self.site_title_ru if lang == 'ru' else self.site_title_uz
 
@@ -300,7 +304,7 @@ class Lead(models.Model):
     STATUS_CHOICES = [
         ('new', '🆕 Yangi'),
         ('contacted', '📞 Bog\'lanildi'),
-        ('in_progress', '⏳ Suhbatda'),
+        ('in_progress', '⏳ O\'rganilmoqda / Suhbatda'),
         ('sold', '✅ Sotuv amalga oshdi'),
         ('cancelled', '❌ Bekor qilindi'),
     ]

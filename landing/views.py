@@ -133,7 +133,7 @@ def dashboard_home(request):
     # Statistikalar
     total_leads = Lead.objects.count()
     new_leads = Lead.objects.filter(status='new').count()
-    contacted_leads = Lead.objects.filter(status='contacted').count()
+    contacted_leads = Lead.objects.filter(status__in=['contacted', 'in_progress']).count()
     sold_leads = Lead.objects.filter(status='sold').count()
 
     # So'nggi 8 ta ariza
@@ -206,6 +206,7 @@ def dashboard_leads_list(request):
 
     status_choices = Lead.STATUS_CHOICES
     new_leads_count = Lead.objects.filter(status='new').count()
+    total_count = Lead.objects.count()
 
     context = {
         'leads': leads,
@@ -213,6 +214,7 @@ def dashboard_leads_list(request):
         'query': query,
         'status_choices': status_choices,
         'new_leads_count': new_leads_count,
+        'total_count': total_count,
         'active_menu': 'leads',
     }
     return render(request, 'dashboard/leads_list.html', context)

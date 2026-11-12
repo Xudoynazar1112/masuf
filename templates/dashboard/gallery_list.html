@@ -1,0 +1,212 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block page_title %}3-punkt: Rasmlar va Videolar Boshqaruvi{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 24px;">
+  <!-- Gallery Media Grid -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div>
+        <h3 class="dash-card-title">Mavjud Rasmlar va Videolar (3-punkt)</h3>
+        <small style="color: var(--dash-text-light);">Landing sahifada 3-akkordeon sifatida foydalanuvchilarga ko'rsatiladi</small>
+      </div>
+      <span style="font-size: 13px; font-weight: 700; color: var(--dash-primary); background: #f0fdf4; padding: 4px 10px; border-radius: 20px;">
+        Jami: {{ photos.count }} ta
+      </span>
+    </div>
+    <div class="dash-card-body">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+        {% for photo in photos %}
+        <div style="position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--dash-border); background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
+          
+          <!-- Media Preview -->
+          <div style="position: relative; width: 100%; height: 140px; background: #0f172a; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            {% if photo.media_type == 'image' and photo.image %}
+              <img src="{{ photo.image.url }}" alt="{{ photo.title_uz }}" style="width: 100%; height: 100%; object-fit: cover;">
+              <span style="position: absolute; top: 8px; left: 8px; background: rgba(15, 23, 42, 0.75); color: #ffffff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; backdrop-filter: blur(4px);">
+                <i class="fas fa-image"></i> Rasm
+              </span>
+            {% elif photo.media_type == 'video' and photo.video %}
+              <video src="{{ photo.video.url }}" controls preload="metadata" style="width: 100%; height: 100%; object-fit: cover;"></video>
+              <span style="position: absolute; top: 8px; left: 8px; background: rgba(2, 132, 199, 0.85); color: #ffffff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; backdrop-filter: blur(4px); pointer-events: none;">
+                <i class="fas fa-video"></i> Video
+              </span>
+            {% elif photo.media_type == 'video_url' %}
+              <div style="text-align: center; color: #ffffff; padding: 10px;">
+                <i class="fas fa-play-circle" style="font-size: 32px; color: #ef4444; margin-bottom: 6px;"></i>
+                <div style="font-size: 11px; opacity: 0.85; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ photo.video_url }}</div>
+              </div>
+              <span style="position: absolute; top: 8px; left: 8px; background: rgba(220, 38, 38, 0.85); color: #ffffff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">
+                <i class="fas fa-link"></i> Havola
+              </span>
+            {% else %}
+              <div style="color: #64748b; font-size: 13px;">Fayl yo'q</div>
+            {% endif %}
+
+            {% if not photo.is_active %}
+              <span style="position: absolute; top: 8px; right: 8px; background: rgba(239, 68, 68, 0.9); color: #ffffff; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700;">
+                Nofaol
+              </span>
+            {% endif %}
+          </div>
+
+          <!-- Media Info -->
+          <div style="padding: 12px; font-size: 13px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between;">
+            <div>
+              <div style="font-weight: 700; color: var(--dash-dark); margin-bottom: 4px; line-height: 1.3;">
+                {{ photo.title_uz|default:"Sarlavhasiz" }}
+              </div>
+              {% if photo.title_ru %}
+                <div style="font-size: 11px; color: var(--dash-text-light); margin-bottom: 6px;">
+                  RU: {{ photo.title_ru }}
+                </div>
+              {% endif %}
+              <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--dash-text-light);">
+                <i class="fas fa-layer-group"></i> {{ photo.get_category_display }}
+                <span>•</span>
+                <span>Tartib: {{ photo.order }}</span>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 12px; padding-top: 8px; border-top: 1px solid #f1f5f9;">
+              <a href="{% url 'dashboard_gallery_edit' photo.id %}" class="btn-action-icon btn-action-edit" style="width: 28px; height: 28px; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;" title="Tahrirlash">
+                <i class="fas fa-edit"></i>
+              </a>
+              <form action="{% url 'dashboard_gallery_delete' photo.id %}" method="POST" onsubmit="return confirm('Rostdan ham ushbu mediani o\'chirmoqchimisiz?');" style="display: inline; margin: 0;">
+                {% csrf_token %}
+                <button type="submit" class="btn-action-icon btn-action-danger" style="width: 28px; height: 28px; font-size: 12px; cursor: pointer;" title="O'chirish">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--dash-text-light);">
+          <i class="fas fa-images" style="font-size: 36px; margin-bottom: 10px; opacity: 0.5;"></i>
+          <p>Hozircha hech qanday rasm yoki video yuklanmagan. O'ng tarafdagi forma orqali qo'shishingiz mumkin.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Media Form -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <h3 class="dash-card-title">Yangi Rasm yoki Video Qo'shish</h3>
+    </div>
+    <div class="dash-card-body">
+      <form method="POST" enctype="multipart/form-data" id="galleryUploadForm">
+        {% csrf_token %}
+
+        <!-- Media Type Selector -->
+        <div style="margin-bottom: 16px;">
+          <label class="form-label" for="gallery_media_type_select">
+            <strong>Media Turi</strong>
+          </label>
+          {{ form.media_type }}
+        </div>
+
+        <!-- Title UZ -->
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="{{ form.title_uz.id_for_label }}">Sarlavha (UZ)</label>
+          {{ form.title_uz }}
+        </div>
+
+        <!-- Title RU -->
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="{{ form.title_ru.id_for_label }}">Sarlavha (RU) <small style="color: var(--dash-text-light);">(ixtiyoriy)</small></label>
+          {{ form.title_ru }}
+        </div>
+
+        <!-- Image Input Group -->
+        <div id="image_input_group" style="margin-bottom: 16px;">
+          <label class="form-label" for="gallery_image_input">
+            <i class="fas fa-image" style="color: #0d9488;"></i> Rasm Faylini Tanlang
+          </label>
+          {{ form.image }}
+          <small style="display: block; margin-top: 4px; color: #0284c7; font-size: 11px;">
+            <i class="fas fa-info-circle"></i> Maksimal ruxsat etilgan hajm: <strong>10 MB</strong> (JPG, PNG, WEBP)
+          </small>
+        </div>
+
+        <!-- Video Input Group -->
+        <div id="video_input_group" style="margin-bottom: 16px; display: none;">
+          <label class="form-label" for="gallery_video_input">
+            <i class="fas fa-video" style="color: #0284c7;"></i> Video Faylini Tanlang
+          </label>
+          {{ form.video }}
+          <small style="display: block; margin-top: 4px; color: #d97706; font-size: 11px;">
+            <i class="fas fa-exclamation-triangle"></i> Maksimal ruxsat etilgan video hajmi: <strong>50 MB</strong> (MP4, WebM)
+          </small>
+        </div>
+
+        <!-- Video URL Input Group -->
+        <div id="video_url_group" style="margin-bottom: 16px; display: none;">
+          <label class="form-label" for="gallery_video_url_input">
+            <i class="fas fa-link" style="color: #ea4335;"></i> Video Havolasi (YouTube / Direct URL)
+          </label>
+          {{ form.video_url }}
+        </div>
+
+        <!-- Category -->
+        <div style="margin-bottom: 16px;">
+          <label class="form-label" for="{{ form.category.id_for_label }}">Bo'lim / Kategoriya</label>
+          {{ form.category }}
+        </div>
+
+        <!-- Order & Active -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+          <div>
+            <label class="form-label" for="{{ form.order.id_for_label }}">Tartib Raqami</label>
+            {{ form.order }}
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 25px;">
+            {{ form.is_active }}
+            <label class="form-label" for="{{ form.is_active.id_for_label }}" style="margin-bottom: 0;">Faol</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-save" style="width: 100%; justify-content: center;">
+          <i class="fas fa-cloud-upload-alt"></i> Mediani Yuklash
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mediaTypeSelect = document.getElementById('gallery_media_type_select');
+    const imageGroup = document.getElementById('image_input_group');
+    const videoGroup = document.getElementById('video_input_group');
+    const videoUrlGroup = document.getElementById('video_url_group');
+
+    function updateMediaTypeInputs() {
+      if (!mediaTypeSelect) return;
+      const val = mediaTypeSelect.value;
+      if (val === 'image') {
+        imageGroup.style.display = 'block';
+        videoGroup.style.display = 'none';
+        videoUrlGroup.style.display = 'none';
+      } else if (val === 'video') {
+        imageGroup.style.display = 'none';
+        videoGroup.style.display = 'block';
+        videoUrlGroup.style.display = 'none';
+      } else if (val === 'video_url') {
+        imageGroup.style.display = 'none';
+        videoGroup.style.display = 'none';
+        videoUrlGroup.style.display = 'block';
+      }
+    }
+
+    if (mediaTypeSelect) {
+      mediaTypeSelect.addEventListener('change', updateMediaTypeInputs);
+      updateMediaTypeInputs();
+    }
+  });
+</script>
+{% endblock %}

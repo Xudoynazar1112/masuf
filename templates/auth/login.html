@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tizimga Kirish - Masuf Menejer Paneli</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <img src="{% static 'images/logo.jpg' %}" alt="Logo" onerror="this.src='https://placehold.co/100x100/0d9488/ffffff?text=M'">
+        <h2>Menejer Boshqaruv Paneli</h2>
+        <p>Landing page ma'lumotlarini boshqarish uchun kiring</p>
+      </div>
+
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="alert {% if msg.tags == 'error' %}alert-error{% else %}alert-info{% endif %}">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ msg }}</span>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST" action="{% url 'dashboard_login' %}">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+          <label class="form-label" for="id_username"><i class="fas fa-user"></i> Login</label>
+          <input type="text" name="username" id="id_username" class="form-control" placeholder="admin yoki manager" required autofocus>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <label class="form-label" for="id_password"><i class="fas fa-lock"></i> Parol</label>
+          <input type="password" name="password" id="id_password" class="form-control" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn-save" style="width: 100%; justify-content: center; padding: 14px; font-size: 15px;">
+          <i class="fas fa-sign-in-alt"></i>
+          <span>Tizimga kirish</span>
+        </button>
+      </form>
+
+      <div style="margin-top: 25px; text-align: center; font-size: 13px; color: var(--dash-text-light);">
+        <p>Default login/parollar:</p>
+        <p><strong>admin / admin123</strong> yoki <strong>manager / manager123</strong></p>
+        <div style="margin-top: 15px;">
+          <a href="{% url 'landing_page' %}" style="color: var(--dash-primary); font-weight: 700; text-decoration: none;">
+            <i class="fas fa-arrow-left"></i> Asosiy saytga qaytish
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

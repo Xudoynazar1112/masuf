@@ -1,0 +1,129 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block page_title %}Sarlavha, Narx va Aloqa Ma'lumotlarini Tahrirlash (UZ / RU){% endblock %}
+
+{% block content %}
+<div class="dash-card" style="max-width: 800px;">
+  <div class="dash-card-header">
+    <h3 class="dash-card-title">Asosiy Sarlavhalar, Narx va Kontaktlar (O'zbek va Rus tillarida)</h3>
+  </div>
+
+  <div class="dash-card-body">
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="form-grid">
+        <!-- Badge -->
+        <div>
+          <label class="form-label" for="{{ form.hero_badge_uz.id_for_label }}">Hero Nishoni (UZ)</label>
+          {{ form.hero_badge_uz }}
+          <small style="color: var(--dash-text-light);">OZARBAYJON • GASHALTI HEALTH NAFTALAN 5*</small>
+        </div>
+
+        <div>
+          <label class="form-label" for="{{ form.hero_badge_ru.id_for_label }}">Hero Nishoni (RU)</label>
+          {{ form.hero_badge_ru }}
+          <small style="color: var(--dash-text-light);">АЗЕРБАЙДЖАН • GASHALTI HEALTH NAFTALAN 5*</small>
+        </div>
+
+        <!-- Asosiy Sarlavha -->
+        <div class="form-grid-full">
+          <label class="form-label" for="{{ form.hero_title_uz.id_for_label }}">Asosiy Katta Sarlavha (UZ)</label>
+          {{ form.hero_title_uz }}
+        </div>
+
+        <div class="form-grid-full">
+          <label class="form-label" for="{{ form.hero_title_ru.id_for_label }}">Asosiy Katta Sarlavha (RU)</label>
+          {{ form.hero_title_ru }}
+        </div>
+
+        <!-- Narx & Uchish sanalari -->
+        <div>
+          <label class="form-label" for="{{ form.tour_price.id_for_label }}">Sayohat Narxi</label>
+          {{ form.tour_price }}
+          <small style="color: var(--dash-text-light);">Masalan: 1350$</small>
+        </div>
+
+        <div>
+          <label class="form-label" for="{{ form.phone_number.id_for_label }}">Telefon Raqami 1</label>
+          {{ form.phone_number }}
+          <small style="color: var(--dash-text-light);">+998919686886</small>
+        </div>
+
+        <div>
+          <label class="form-label" for="{{ form.phone_number_2.id_for_label }}">Telefon Raqami 2</label>
+          {{ form.phone_number_2 }}
+          <small style="color: var(--dash-text-light);">+998974111151</small>
+        </div>
+
+        <div>
+          <label class="form-label" for="{{ form.flight_dates_uz.id_for_label }}">Uchish Sanalari (UZ)</label>
+          {{ form.flight_dates_uz }}
+          <small style="color: var(--dash-text-light);">08.10.2026 (7 kecha 8 kun)</small>
+        </div>
+
+        <div>
+          <label class="form-label" for="{{ form.flight_dates_ru.id_for_label }}">Uchish Sanalari (RU)</label>
+          {{ form.flight_dates_ru }}
+          <small style="color: var(--dash-text-light);">08.10.2026 (7 ночей 8 дней)</small>
+        </div>
+
+        <!-- Mehmonxona -->
+        <div>
+          <label class="form-label" for="{{ form.hotel_name_uz.id_for_label }}">Mehmonxona Nomi (UZ)</label>
+          {{ form.hotel_name_uz }}
+        </div>
+
+        <div>
+          <label class="form-label" for="{{ form.hotel_name_ru.id_for_label }}">Mehmonxona Nomi (RU)</label>
+          {{ form.hotel_name_ru }}
+        </div>
+
+        <!-- Dastur haqida -->
+        <div class="form-grid-full">
+          <label class="form-label" for="{{ form.about_text_uz.id_for_label }}">Dastur Haqida Matn (UZ)</label>
+          {{ form.about_text_uz }}
+        </div>
+
+        <div class="form-grid-full">
+          <label class="form-label" for="{{ form.about_text_ru.id_for_label }}">Dastur Haqida Matn (RU)</label>
+          {{ form.about_text_ru }}
+        </div>
+
+        <!-- Ijtimoiy tarmoqlar va kontaktlar -->
+        <div>
+          <label class="form-label" for="{{ form.operator_name.id_for_label }}">Operator Ismi</label>
+          {{ form.operator_name }}
+        </div>
+
+        <div>
+          <label class="form-label" for="{{ form.telegram_url.id_for_label }}">Telegram Havolasi</label>
+          {{ form.telegram_url }}
+        </div>
+
+        <div>
+          <label class="form-label" for="{{ form.instagram_url.id_for_label }}">Instagram Havolasi</label>
+          {{ form.instagram_url }}
+        </div>
+
+        <div>
+          <label class="form-label" for="{{ form.location_url.id_for_label }}">Lokatsiya / Xarita Havolasi</label>
+          {{ form.location_url }}
+        </div>
+      </div>
+
+      <div style="margin-top: 25px; display: flex; gap: 12px;">
+        <button type="submit" class="btn-save">
+          <i class="fas fa-check-circle"></i> O'zgarishlarni Saqlash
+        </button>
+        <a href="{% url 'dashboard_home' %}" class="btn-site-preview" style="padding: 12px 18px;">
+          Bekor qilish
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+

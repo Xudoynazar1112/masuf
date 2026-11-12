@@ -1,0 +1,131 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block page_title %}Mediani Tahrirlash{% endblock %}
+
+{% block content %}
+<div class="dash-card" style="max-width: 650px;">
+  <div class="dash-card-header">
+    <h3 class="dash-card-title">Mediani Tahrirlash: {{ photo.title_uz|default:"Nomsiz" }}</h3>
+    <a href="{% url 'dashboard_gallery' %}" class="btn-action-icon" style="width: auto; padding: 6px 12px; font-size: 13px; text-decoration: none;">
+      <i class="fas fa-arrow-left"></i> Orqaga
+    </a>
+  </div>
+
+  <div class="dash-card-body">
+    
+    <!-- Current Media Preview -->
+    <div style="margin-bottom: 20px; padding: 14px; background: #f8fafc; border-radius: 8px; border: 1px solid var(--dash-border);">
+      <div style="font-size: 12px; font-weight: 700; color: var(--dash-text-light); margin-bottom: 8px;">Joriy Fayl:</div>
+      {% if photo.media_type == 'image' and photo.image %}
+        <img src="{{ photo.image.url }}" alt="{{ photo.title_uz }}" style="max-width: 100%; height: 180px; object-fit: cover; border-radius: 6px;">
+      {% elif photo.media_type == 'video' and photo.video %}
+        <video src="{{ photo.video.url }}" controls style="max-width: 100%; height: 180px; border-radius: 6px; background: #000;"></video>
+      {% elif photo.media_type == 'video_url' %}
+        <div style="font-size: 13px; color: #0284c7;">
+          <i class="fas fa-link"></i> <a href="{{ photo.video_url }}" target="_blank">{{ photo.video_url }}</a>
+        </div>
+      {% endif %}
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div style="margin-bottom: 16px;">
+        <label class="form-label" for="gallery_media_type_select"><strong>Media Turi</strong></label>
+        {{ form.media_type }}
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <label class="form-label" for="{{ form.title_uz.id_for_label }}">Sarlavha (UZ)</label>
+        {{ form.title_uz }}
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <label class="form-label" for="{{ form.title_ru.id_for_label }}">Sarlavha (RU)</label>
+        {{ form.title_ru }}
+      </div>
+
+      <div id="image_input_group" style="margin-bottom: 16px;">
+        <label class="form-label" for="gallery_image_input">
+          <i class="fas fa-image" style="color: #0d9488;"></i> Yangi Rasm Fayli (agar o'zgartirmoqchi bo'lsangiz)
+        </label>
+        {{ form.image }}
+        <small style="display: block; margin-top: 4px; color: #0284c7; font-size: 11px;">Maksimal hajm: 10 MB</small>
+      </div>
+
+      <div id="video_input_group" style="margin-bottom: 16px; display: none;">
+        <label class="form-label" for="gallery_video_input">
+          <i class="fas fa-video" style="color: #0284c7;"></i> Yangi Video Fayli (agar o'zgartirmoqchi bo'lsangiz)
+        </label>
+        {{ form.video }}
+        <small style="display: block; margin-top: 4px; color: #d97706; font-size: 11px;">Maksimal hajm: 50 MB</small>
+      </div>
+
+      <div id="video_url_group" style="margin-bottom: 16px; display: none;">
+        <label class="form-label" for="gallery_video_url_input">
+          <i class="fas fa-link" style="color: #ea4335;"></i> Video Havolasi (YouTube / Direct URL)
+        </label>
+        {{ form.video_url }}
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label class="form-label" for="{{ form.category.id_for_label }}">Bo'lim / Kategoriya</label>
+        {{ form.category }}
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+        <div>
+          <label class="form-label" for="{{ form.order.id_for_label }}">Tartib Raqami</label>
+          {{ form.order }}
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-top: 25px;">
+          {{ form.is_active }}
+          <label class="form-label" for="{{ form.is_active.id_for_label }}" style="margin-bottom: 0;">Faol</label>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button type="submit" class="btn-save">
+          <i class="fas fa-save"></i> O'zgarishlarni Saqlash
+        </button>
+        <a href="{% url 'dashboard_gallery' %}" class="btn-site-preview" style="padding: 12px 18px;">
+          Bekor qilish
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mediaTypeSelect = document.getElementById('gallery_media_type_select');
+    const imageGroup = document.getElementById('image_input_group');
+    const videoGroup = document.getElementById('video_input_group');
+    const videoUrlGroup = document.getElementById('video_url_group');
+
+    function updateMediaTypeInputs() {
+      if (!mediaTypeSelect) return;
+      const val = mediaTypeSelect.value;
+      if (val === 'image') {
+        imageGroup.style.display = 'block';
+        videoGroup.style.display = 'none';
+        videoUrlGroup.style.display = 'none';
+      } else if (val === 'video') {
+        imageGroup.style.display = 'none';
+        videoGroup.style.display = 'block';
+        videoUrlGroup.style.display = 'none';
+      } else if (val === 'video_url') {
+        imageGroup.style.display = 'none';
+        videoGroup.style.display = 'none';
+        videoUrlGroup.style.display = 'block';
+      }
+    }
+
+    if (mediaTypeSelect) {
+      mediaTypeSelect.addEventListener('change', updateMediaTypeInputs);
+      updateMediaTypeInputs();
+    }
+  });
+</script>
+{% endblock %}

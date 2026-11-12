@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Menejer Boshqaruv Paneli{% endblock %} - Masuf</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Dashboard CSS -->
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="dash-sidebar" id="dashSidebar">
+    <div class="sidebar-header">
+      <img src="{% static 'images/logo.jpg' %}" alt="Logo" onerror="this.src='https://placehold.co/100x100/0d9488/ffffff?text=M'">
+      <div>
+        <h2>MASUF PANEL</h2>
+        <span>Landing Boshqaruvi</span>
+      </div>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li class="menu-label">Asosiy</li>
+      <li class="menu-item {% if active_menu == 'home' %}active{% endif %}">
+        <a href="{% url 'dashboard_home' %}">
+          <i class="fas fa-home"></i>
+          <span>Boshqaruv & Arizalar</span>
+          {% if new_leads_count %}
+            <span class="sidebar-badge">{{ new_leads_count }} yangi</span>
+          {% endif %}
+        </a>
+      </li>
+
+      <li class="menu-item {% if active_menu == 'leads' %}active{% endif %}">
+        <a href="{% url 'dashboard_leads' %}">
+          <i class="fas fa-headset"></i>
+          <span>Mijozlar Bilan Muloqot (Leadlar)</span>
+        </a>
+      </li>
+
+      <li class="menu-label">Punktlarni Tahrirlash</li>
+      <li class="menu-item {% if active_menu == 'settings' %}active{% endif %}">
+        <a href="{% url 'dashboard_settings' %}">
+          <i class="fas fa-sliders-h"></i>
+          <span>2-punkt & Aloqa: Narx & Telefon</span>
+        </a>
+      </li>
+
+      <li class="menu-item {% if active_menu == 'features' %}active{% endif %}">
+        <a href="{% url 'dashboard_features' %}">
+          <i class="fas fa-hotel"></i>
+          <span>1-punkt: Dastur & Xizmatlar</span>
+        </a>
+      </li>
+
+      <li class="menu-item {% if active_menu == 'gallery' %}active{% endif %}">
+        <a href="{% url 'dashboard_gallery' %}">
+          <i class="fas fa-photo-video"></i>
+          <span>3-punkt: Rasmlar & Videolar</span>
+        </a>
+      </li>
+
+      <li class="menu-item {% if active_menu == 'diseases' %}active{% endif %}">
+        <a href="{% url 'dashboard_diseases' %}">
+          <i class="fas fa-heartbeat"></i>
+          <span>4-punkt: Qanday kasalliklar</span>
+        </a>
+      </li>
+
+      <li class="menu-item {% if active_menu == 'treatments' %}active{% endif %}">
+        <a href="{% url 'dashboard_treatments' %}">
+          <i class="fas fa-notes-medical"></i>
+          <span>5-punkt: Davolanish turlari</span>
+        </a>
+      </li>
+
+      <li class="menu-label">Sayt</li>
+      <li class="menu-item">
+        <a href="{% url 'landing_page' %}" target="_blank">
+          <i class="fas fa-external-link-alt"></i>
+          <span>Saytni Ko'rish</span>
+        </a>
+      </li>
+    </ul>
+
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">{{ request.user.username|slice:":1"|upper }}</div>
+        <div>
+          <div class="user-name">{{ request.user.username }}</div>
+          <div class="user-role">{% if request.user.is_superuser %}Admin{% else %}Menejer{% endif %}</div>
+        </div>
+      </div>
+      <a href="{% url 'dashboard_logout' %}" style="color: #ef4444; font-size: 16px;" title="Chiqish">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="dash-main">
+    <header class="dash-topbar">
+      <div class="topbar-title">
+        <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+      </div>
+      <div class="topbar-actions">
+        <a href="{% url 'landing_page' %}" target="_blank" class="btn-site-preview">
+          <i class="fas fa-eye"></i>
+          <span>Saytni jonli ko'rish</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dash-content">
+      <!-- Flash Messages -->
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="alert {% if msg.tags == 'error' %}alert-error{% elif msg.tags == 'success' %}alert-success{% else %}alert-info{% endif %}">
+            <i class="fas {% if msg.tags == 'error' %}fa-exclamation-circle{% elif msg.tags == 'success' %}fa-check-circle{% else %}fa-info-circle{% endif %}"></i>
+            <span>{{ msg }}</span>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script src="{% static 'js/dashboard.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

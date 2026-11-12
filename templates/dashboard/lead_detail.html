@@ -1,0 +1,83 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block page_title %}Ariza Tafsilotlari - {{ lead.name }}{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+  <!-- Lead Info Card -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <h3 class="dash-card-title">Mijoz Ma'lumotlari</h3>
+      <span class="status-badge badge-{{ lead.status }}">{{ lead.get_status_display }}</span>
+    </div>
+    <div class="dash-card-body">
+      <div style="margin-bottom: 20px;">
+        <span style="font-size: 12px; color: var(--dash-text-light); text-transform: uppercase; font-weight: 700;">Ism:</span>
+        <div style="font-size: 20px; font-weight: 800; color: var(--dash-dark);">{{ lead.name }}</div>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <span style="font-size: 12px; color: var(--dash-text-light); text-transform: uppercase; font-weight: 700;">Telefon Raqam:</span>
+        <div style="font-size: 18px; font-weight: 700; color: var(--dash-primary); margin-top: 4px;">
+          <a href="tel:{{ lead.phone }}" style="text-decoration: none; color: inherit;">
+            <i class="fas fa-phone-alt"></i> {{ lead.phone }}
+          </a>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <span style="font-size: 12px; color: var(--dash-text-light); text-transform: uppercase; font-weight: 700;">Mijoz Xabari / Istagi:</span>
+        <div style="font-size: 14px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--dash-border); margin-top: 6px;">
+          {{ lead.message|default:"Mijoz tomonidan qo'shimcha xabar yozilmagan." }}
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 15px; font-size: 13px; color: var(--dash-text-light); margin-bottom: 25px;">
+        <div><i class="fas fa-clock"></i> Qoldirilgan: {{ lead.created_at|date:"d.m.Y H:i" }}</div>
+        <div><i class="fas fa-globe"></i> Manba: {{ lead.source }}</div>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <a href="tel:{{ lead.phone }}" class="btn-save" style="background: var(--dash-primary); text-decoration: none;">
+          <i class="fas fa-phone-alt"></i> Qo'ng'iroq qilish
+        </a>
+        <a href="https://wa.me/{{ lead.phone|slugify }}" target="_blank" class="btn-save" style="background: #25d366; text-decoration: none;">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update Status & Notes Card -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <h3 class="dash-card-title">Holatni O'zgartirish & Operator Izohi</h3>
+    </div>
+    <div class="dash-card-body">
+      <form method="POST">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+          <label class="form-label" for="{{ form.status.id_for_label }}">Ariza Holati</label>
+          {{ form.status }}
+        </div>
+
+        <div style="margin-bottom: 25px;">
+          <label class="form-label" for="{{ form.operator_notes.id_for_label }}">Operator Izohi va Eslatmalari</label>
+          {{ form.operator_notes }}
+          <small style="color: var(--dash-text-light);">Mijoz bilan muloqot xulosasi yoki qo'shimcha ma'lumotlarni yozib qoldiring.</small>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+          <button type="submit" class="btn-save">
+            <i class="fas fa-check"></i> Saqlash
+          </button>
+          <a href="{% url 'dashboard_leads' %}" class="btn-site-preview" style="padding: 12px 18px;">
+            Ro'yxatga qaytish
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

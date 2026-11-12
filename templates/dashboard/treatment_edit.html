@@ -1,0 +1,61 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block page_title %}Muolajani Tahrirlash - {{ item.name_uz }}{% endblock %}
+
+{% block content %}
+<div class="dash-card" style="max-width: 700px;">
+  <div class="dash-card-header">
+    <h3 class="dash-card-title">Muolaja / Xizmatni Tahrirlash (UZ / RU)</h3>
+  </div>
+  <div class="dash-card-body">
+    <form method="POST">
+      {% csrf_token %}
+      <div style="margin-bottom: 16px;">
+        <label class="form-label" for="{{ form.category.id_for_label }}">Toifa</label>
+        {{ form.category }}
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label class="form-label" for="{{ form.name_uz.id_for_label }}">Xizmat / Muolaja Nomi (UZ)</label>
+        {{ form.name_uz }}
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label class="form-label" for="{{ form.name_ru.id_for_label }}">Xizmat / Muolaja Nomi (RU)</label>
+        {{ form.name_ru }}
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label class="form-label" for="{{ form.description_uz.id_for_label }}">Qo'shimcha Izoh (UZ - ixtiyoriy)</label>
+        {{ form.description_uz }}
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label class="form-label" for="{{ form.description_ru.id_for_label }}">Qo'shimcha Izoh (RU - ixtiyoriy)</label>
+        {{ form.description_ru }}
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+        <div>
+          <label class="form-label" for="{{ form.order.id_for_label }}">Tartib Raqami</label>
+          {{ form.order }}
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-top: 25px;">
+          {{ form.is_active }}
+          <label class="form-label" for="{{ form.is_active.id_for_label }}" style="margin-bottom: 0;">Faol</label>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px;">
+        <button type="submit" class="btn-save">
+          <i class="fas fa-check"></i> Saqlash
+        </button>
+        <a href="{% url 'dashboard_treatments' %}" class="btn-site-preview" style="padding: 12px 20px;">
+          Bekor qilish
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

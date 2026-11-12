@@ -1,0 +1,148 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block page_title %}Davolanish Turlari va Muolajalar (UZ / RU){% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 24px;">
+  <!-- Existing Treatment Categories & Items -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <h3 class="dash-card-title">Mavjud Toifalar va Muolajalar</h3>
+    </div>
+    <div class="dash-card-body">
+      {% for cat in categories %}
+      <div style="margin-bottom: 25px; background: #f8fafc; border: 1px solid var(--dash-border); border-radius: 10px; padding: 18px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--dash-border); padding-bottom: 8px;">
+          <div>
+            <h4 style="font-size: 16px; font-weight: 800; color: var(--dash-dark);">
+              <i class="{{ cat.icon }}" style="color: var(--dash-primary);"></i> 🇺🇿 {{ cat.title_uz }}
+            </h4>
+            {% if cat.title_ru %}
+            <div style="font-size: 13px; color: var(--dash-text-muted); font-weight: 600; margin-left: 24px;">
+              🇷🇺 {{ cat.title_ru }}
+            </div>
+            {% endif %}
+          </div>
+          <span style="font-size: 12px; color: var(--dash-text-light); font-weight: 700;">
+            {{ cat.items.count }} ta xizmat
+          </span>
+        </div>
+
+        <ul style="list-style: none; padding: 0;">
+          {% for item in cat.items.all %}
+          <li style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 6px; background: #ffffff; border: 1px solid #edf2f7; margin-bottom: 6px;">
+            <div>
+              <div style="font-size: 14px; font-weight: 600; color: var(--dash-dark);">
+                🇺🇿 {{ item.name_uz }}
+              </div>
+              {% if item.name_ru %}
+              <div style="font-size: 12px; color: var(--dash-text-muted);">
+                🇷🇺 {{ item.name_ru }}
+              </div>
+              {% endif %}
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <a href="{% url 'dashboard_treatment_edit' item.id %}" class="btn-action-icon" style="width: 26px; height: 26px; font-size: 11px;" title="Tahrirlash">
+                <i class="fas fa-edit"></i>
+              </a>
+              <form action="{% url 'dashboard_treatment_delete' item.id %}" method="POST" onsubmit="return confirm('Muolajani o\'chirmoqchimisiz?');" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-action-icon btn-action-danger" style="width: 26px; height: 26px; font-size: 11px; cursor: pointer;" title="O'chirish">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </div>
+          </li>
+          {% empty %}
+          <li style="font-size: 13px; color: var(--dash-text-light);">Ushbu toifaga hali muolajalar kiritilmagan.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Add Item / Add Category Forms -->
+  <div>
+    <!-- Add Item Form -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <h3 class="dash-card-title">Yangi Muolaja / Xizmat Qo'shish</h3>
+      </div>
+      <div class="dash-card-body">
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="add_item" value="1">
+          
+          <div style="margin-bottom: 14px;">
+            <label class="form-label" for="{{ item_form.category.id_for_label }}">Qaysi Toifaga tegishli?</label>
+            {{ item_form.category }}
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label class="form-label" for="{{ item_form.name_uz.id_for_label }}">Muolaja Nomi (UZ)</label>
+            {{ item_form.name_uz }}
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label class="form-label" for="{{ item_form.name_ru.id_for_label }}">Muolaja Nomi (RU)</label>
+            {{ item_form.name_ru }}
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label class="form-label" for="{{ item_form.order.id_for_label }}">Tartib Raqami</label>
+            {{ item_form.order }}
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+            {{ item_form.is_active }}
+            <label class="form-label" for="{{ item_form.is_active.id_for_label }}" style="margin-bottom: 0;">Faol</label>
+          </div>
+
+          <button type="submit" class="btn-save" style="width: 100%; justify-content: center;">
+            <i class="fas fa-plus"></i> Muolajani Qo'shish
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add Category Form -->
+    <div class="dash-card">
+      <div class="dash-card-header">
+        <h3 class="dash-card-title">Yangi Toifa Qo'shish</h3>
+      </div>
+      <div class="dash-card-body">
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="add_category" value="1">
+
+          <div style="margin-bottom: 14px;">
+            <label class="form-label" for="{{ cat_form.title_uz.id_for_label }}">Toifa Sarlavhasi (UZ)</label>
+            {{ cat_form.title_uz }}
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label class="form-label" for="{{ cat_form.title_ru.id_for_label }}">Toifa Sarlavhasi (RU)</label>
+            {{ cat_form.title_ru }}
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label class="form-label" for="{{ cat_form.icon.id_for_label }}">Ikonka (FontAwesome class)</label>
+            {{ cat_form.icon }}
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label class="form-label" for="{{ cat_form.order.id_for_label }}">Tartib Raqami</label>
+            {{ cat_form.order }}
+          </div>
+
+          <button type="submit" class="btn-save" style="width: 100%; justify-content: center; background: #0284c7;">
+            <i class="fas fa-folder-plus"></i> Toifani Qo'shish
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

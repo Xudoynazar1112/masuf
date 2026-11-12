@@ -1,0 +1,123 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block page_title %}Kasalliklar Bo'limi Boshqaruvi (UZ / RU){% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px;">
+  <!-- Existing Diseases List -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <h3 class="dash-card-title">Mavjud Kasalliklar Ro'yxati</h3>
+      <span style="font-size: 13px; color: var(--dash-text-light);">Jami: {{ diseases.count }} ta</span>
+    </div>
+    <div class="dash-card-body" style="padding: 0;">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>Tartib</th>
+            <th>Nomi (UZ / RU)</th>
+            <th>Ikonka</th>
+            <th>Holat</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in diseases %}
+          <tr>
+            <td>{{ item.order }}</td>
+            <td style="font-weight: 700;">
+              <div>🇺🇿 {{ item.title_uz }}</div>
+              {% if item.title_ru %}
+              <div style="font-size: 12px; color: var(--dash-text-muted); font-weight: 500;">🇷🇺 {{ item.title_ru }}</div>
+              {% endif %}
+            </td>
+            <td>
+              <i class="{{ item.icon }}" style="color: var(--dash-primary); font-size: 18px;"></i>
+            </td>
+            <td>
+              {% if item.is_active %}
+                <span style="color: #10b981; font-weight: 700; font-size: 12px;"><i class="fas fa-check-circle"></i> Faol</span>
+              {% else %}
+                <span style="color: #94a3b8; font-weight: 700; font-size: 12px;"><i class="fas fa-times-circle"></i> Nofaol</span>
+              {% endif %}
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <a href="{% url 'dashboard_disease_edit' item.id %}" class="btn-action-icon" title="Tahrirlash">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <form action="{% url 'dashboard_disease_delete' item.id %}" method="POST" onsubmit="return confirm('Haqiqatdan ham o\'chirmoqchimisiz?');" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-action-icon btn-action-danger" style="cursor: pointer;" title="O'chirish">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" style="text-align: center; color: var(--dash-text-light); padding: 30px;">
+              Hozircha kasalliklar qo'shilmagan.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Add New Disease Form -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <h3 class="dash-card-title">Yangi Kasallik Qo'shish</h3>
+    </div>
+    <div class="dash-card-body">
+      <form method="POST">
+        {% csrf_token %}
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="{{ form.title_uz.id_for_label }}">Kasallik Nomi (UZ)</label>
+          {{ form.title_uz }}
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="{{ form.title_ru.id_for_label }}">Kasallik Nomi (RU)</label>
+          {{ form.title_ru }}
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="{{ form.icon.id_for_label }}">Ikonka (FontAwesome class)</label>
+          {{ form.icon }}
+          <small style="color: var(--dash-text-light);">Masalan: fas fa-bone, fas fa-brain, fas fa-user-md</small>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="{{ form.description_uz.id_for_label }}">Tavsif (UZ)</label>
+          {{ form.description_uz }}
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label class="form-label" for="{{ form.description_ru.id_for_label }}">Tavsif (RU)</label>
+          {{ form.description_ru }}
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+          <div>
+            <label class="form-label" for="{{ form.order.id_for_label }}">Tartib Raqami</label>
+            {{ form.order }}
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 25px;">
+            {{ form.is_active }}
+            <label class="form-label" for="{{ form.is_active.id_for_label }}" style="margin-bottom: 0;">Saytda ko'rinsin</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-save" style="width: 100%; justify-content: center;">
+          <i class="fas fa-plus"></i> Yangi Qo'shish
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

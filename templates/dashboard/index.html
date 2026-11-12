@@ -1,0 +1,157 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block page_title %}Boshqaruv Paneli & Arizalar{% endblock %}
+
+{% block content %}
+<!-- Top Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card stat-primary">
+    <div>
+      <div class="stat-number">{{ total_leads }}</div>
+      <div class="stat-label">Jami Arizalar (Leadlar)</div>
+    </div>
+    <div class="stat-icon">
+      <i class="fas fa-users"></i>
+    </div>
+  </div>
+
+  <div class="stat-card stat-info">
+    <div>
+      <div class="stat-number">{{ new_leads }}</div>
+      <div class="stat-label">Yangi Qoldirilganlar</div>
+    </div>
+    <div class="stat-icon">
+      <i class="fas fa-bell"></i>
+    </div>
+  </div>
+
+  <div class="stat-card stat-warning">
+    <div>
+      <div class="stat-number">{{ contacted_leads }}</div>
+      <div class="stat-label">Bog'lanilganlar</div>
+    </div>
+    <div class="stat-icon">
+      <i class="fas fa-phone-volume"></i>
+    </div>
+  </div>
+
+  <div class="stat-card stat-success">
+    <div>
+      <div class="stat-number">{{ sold_leads }}</div>
+      <div class="stat-label">Sotuv Amalga Oshgan</div>
+    </div>
+    <div class="stat-icon">
+      <i class="fas fa-check-double"></i>
+    </div>
+  </div>
+</div>
+
+<!-- Main 2-Column Section -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+  
+  <!-- 1. Recent Leads Table (Mijozlar bilan gaplashish) -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <h3 class="dash-card-title"><i class="fas fa-headset" style="color: var(--dash-primary); margin-right: 6px;"></i> Mijozlar Arizalari (Leadlar)</h3>
+      <a href="{% url 'dashboard_leads' %}" style="font-size: 13px; font-weight: 700; color: var(--dash-primary); text-decoration: none;">
+        Barchasi ({{ total_leads }}) <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+    <div class="dash-card-body" style="padding: 0;">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>Mijoz Ismi</th>
+            <th>Telefon</th>
+            <th>Holat</th>
+            <th>Sana</th>
+            <th>Muloqot</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lead in recent_leads %}
+          <tr>
+            <td style="font-weight: 700;">{{ lead.name }}</td>
+            <td>
+              <a href="tel:{{ lead.phone }}" style="color: var(--dash-primary); font-weight: 700; text-decoration: none;">
+                {{ lead.phone }}
+              </a>
+            </td>
+            <td>
+              <span class="status-badge badge-{{ lead.status }}">{{ lead.get_status_display }}</span>
+            </td>
+            <td style="font-size: 13px; color: var(--dash-text-light);">
+              {{ lead.created_at|date:"d.m.Y H:i" }}
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <a href="tel:{{ lead.phone }}" class="btn-action-icon" style="color: #0d9488;" title="Qo'ng'iroq qilish">
+                  <i class="fas fa-phone-alt"></i>
+                </a>
+                <a href="https://wa.me/{{ lead.phone|slugify }}" target="_blank" class="btn-action-icon" style="color: #25d366;" title="WhatsApp">
+                  <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="{% url 'dashboard_lead_detail' lead.id %}" class="btn-action-icon" title="Holat / Izoh yozish">
+                  <i class="fas fa-edit"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" style="text-align: center; color: var(--dash-text-light); padding: 30px;">
+              Hozircha arizalar kelib tushmagan.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2. Accordion Punktlarini Tahrirlash -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <h3 class="dash-card-title"><i class="fas fa-sliders-h" style="color: var(--dash-primary); margin-right: 6px;"></i> Punktlarni Tahrirlash</h3>
+    </div>
+    <div class="dash-card-body" style="display: flex; flex-direction: column; gap: 12px;">
+      
+      <a href="{% url 'dashboard_settings' %}" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #f8fafc; border: 1px solid var(--dash-border); border-radius: 8px; text-decoration: none; color: var(--dash-dark); font-weight: 700; transition: all 0.2s;">
+        <div>
+          <i class="fas fa-tag" style="color: #f59e0b; margin-right: 8px;"></i> Sarlavha & Narx ({{ settings.tour_price }})
+        </div>
+        <i class="fas fa-chevron-right" style="color: var(--dash-text-light); font-size: 12px;"></i>
+      </a>
+
+      <a href="{% url 'dashboard_features' %}" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #f8fafc; border: 1px solid var(--dash-border); border-radius: 8px; text-decoration: none; color: var(--dash-dark); font-weight: 700; transition: all 0.2s;">
+        <div>
+          <i class="fas fa-hotel" style="color: #0d9488; margin-right: 8px;"></i> 1-punkt: Dastur & Xizmatlar
+        </div>
+        <i class="fas fa-chevron-right" style="color: var(--dash-text-light); font-size: 12px;"></i>
+      </a>
+
+      <a href="{% url 'dashboard_diseases' %}" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #f8fafc; border: 1px solid var(--dash-border); border-radius: 8px; text-decoration: none; color: var(--dash-dark); font-weight: 700; transition: all 0.2s;">
+        <div>
+          <i class="fas fa-heartbeat" style="color: #0284c7; margin-right: 8px;"></i> 3-punkt: Qanday kasalliklar
+        </div>
+        <i class="fas fa-chevron-right" style="color: var(--dash-text-light); font-size: 12px;"></i>
+      </a>
+
+      <a href="{% url 'dashboard_treatments' %}" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #f8fafc; border: 1px solid var(--dash-border); border-radius: 8px; text-decoration: none; color: var(--dash-dark); font-weight: 700; transition: all 0.2s;">
+        <div>
+          <i class="fas fa-notes-medical" style="color: #10b981; margin-right: 8px;"></i> 4-punkt: Davolanish turlari
+        </div>
+        <i class="fas fa-chevron-right" style="color: var(--dash-text-light); font-size: 12px;"></i>
+      </a>
+
+      <hr style="border: 0; border-top: 1px solid var(--dash-border); margin: 6px 0;">
+
+      <a href="{% url 'landing_page' %}" target="_blank" class="btn-save" style="width: 100%; justify-content: center;">
+        <i class="fas fa-eye"></i> Saytni Ko'rish
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,427 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if current_lang == 'ru' %}{{ settings.site_title_ru }}{% else %}{{ settings.site_title_uz }}{% endif %}</title>
+  <meta name="description"
+    content="{% if current_lang == 'ru' %}Высококачественное лечение в санатории Нафталан и 8-дневный тур по Азербайджану. 5* отель Gashalti Health Naftalan, 3-разовое питание и полный лечебный пакет.{% else %}Naftalan sanatoriyasida yuqori sifatli davolanish va Ozarbayjon bo'ylab 8 kunlik ajoyib sayohat. 5* Gashalti Health Naftalan mehmonxonasi, 3 mahal ovqat va to'liq davolanish paketi.{% endif %}">
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="mobile-first-body">
+
+  <!-- Minimal Header / Top Bar -->
+  <header class="simple-header">
+    <div class="simple-header-inner">
+      <div class="brand-box">
+        <img src="{% static 'images/logo.jpg' %}" alt="Masuf Logo"
+          onerror="this.src='https://placehold.co/100x100/0d9488/ffffff?text=MASUF'">
+        <div>
+          <h1 class="brand-title">MASUF TRAVEL</h1>
+          <span class="brand-sub">{% if current_lang == 'ru' %}Лечение & Отдых в Нафталане{% else %}Naftalan Davolanish & Sayohat{% endif %}</span>
+        </div>
+      </div>
+      <div class="header-right-group">
+        <!-- Language Switcher -->
+        <div class="lang-switch-box">
+          <a href="?lang=uz" class="lang-switch-btn {% if current_lang != 'ru' %}active{% endif %}" title="O'zbek tili">
+            <span class="flag">🇺🇿</span> <span>UZ</span>
+          </a>
+          <a href="?lang=ru" class="lang-switch-btn {% if current_lang == 'ru' %}active{% endif %}" title="Русский язык">
+            <span class="flag">🇷🇺</span> <span>RU</span>
+          </a>
+        </div>
+
+        <a href="tel:{{ settings.phone_number }}" class="header-phone-btn" title="{% if current_lang == 'ru' %}Позвонить{% else %}Qo'ng'iroq qilish{% endif %}">
+          <i class="fas fa-phone-alt"></i>
+          <span>{{ settings.phone_number }}</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="page-wrapper">
+
+    <!-- 5-PUNKT ACCORDION (FAQ STILIDA) -->
+    <section class="accordion-section">
+      <div class="section-title-wrap" style="text-align: center; margin: 20px 0 25px;">
+        <h2 class="accordion-main-heading"
+          style="font-size: 22px; font-weight: 800; line-height: 1.4; color: var(--dark); margin: 0;">
+          {% if current_lang == 'ru' %}{{ settings.hero_title_ru }}{% else %}{{ settings.hero_title_uz }}{% endif %}
+        </h2>
+      </div>
+
+      <div class="accordion-container" id="naftalanAccordion">
+
+        <!-- ==========================================
+             1-PUNKT: Dastur haqida ma'lumot
+             ========================================== -->
+        <div class="accordion-item" id="acc-item-1">
+          <button class="accordion-header" type="button" aria-expanded="false" data-target="acc-body-1">
+            <div class="acc-header-left">
+              <div class="acc-icon-box" style="background: rgba(13, 148, 136, 0.12); color: #0d9488;">
+                <i class="fas fa-hotel"></i>
+              </div>
+              <span class="acc-title">{% if current_lang == 'ru' %}Информация о программе лечения в Нафталане{% else %}Naftalan davolanish dasturi haqida ma'lumot{% endif %}</span>
+            </div>
+            <div class="acc-chevron">
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </button>
+          <div class="accordion-body" id="acc-body-1">
+            <div class="accordion-content">
+              <p class="acc-lead-text">{% if current_lang == 'ru' %}{{ settings.about_text_ru }}{% else %}{{ settings.about_text_uz }}{% endif %}</p>
+
+              <div class="included-grid">
+                {% for feature in features %}
+                <div class="included-chip {% if feature.highlight %}highlight{% endif %}">
+                  <i class="{{ feature.icon }}"></i>
+                  <span>{% if current_lang == 'ru' %}{{ feature.title_ru|default:feature.title_uz }}{% else %}{{ feature.title_uz }}{% endif %}</span>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             2-PUNKT: Narx haqida batafsil ma'lumot
+             ========================================== -->
+        <div class="accordion-item" id="acc-item-2">
+          <button class="accordion-header" type="button" aria-expanded="false" data-target="acc-body-2">
+            <div class="acc-header-left">
+              <div class="acc-icon-box" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
+                <i class="fas fa-tags"></i>
+              </div>
+              <span class="acc-title">{% if current_lang == 'ru' %}Подробная информация о стоимости{% else %}Narx haqida batafsil ma'lumot{% endif %}</span>
+            </div>
+            <div class="acc-chevron">
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </button>
+          <div class="accordion-body" id="acc-body-2">
+            <div class="accordion-content">
+              <div class="price-banner-box">
+                <div class="price-val-big">{{ settings.tour_price }}</div>
+                <div class="price-val-sub">{% if current_lang == 'ru' %}Полный пакет на 1 человека (7 ночей 8 дней){% else %}1 kishi uchun to'liq paket (7 kecha 8 kun){% endif %}</div>
+              </div>
+
+              <div class="info-list-styled">
+                <div class="info-row">
+                  <strong><i class="fas fa-calendar-alt" style="color: #0d9488;"></i> {% if current_lang == 'ru' %}Даты вылета:{% else %}Uchish sanalari:{% endif %}</strong>
+                  <span>{% if current_lang == 'ru' %}{{ settings.flight_dates_ru }}{% else %}{{ settings.flight_dates_uz }}{% endif %}</span>
+                </div>
+                <div class="info-row">
+                  <strong><i class="fas fa-hotel" style="color: #0d9488;"></i> {% if current_lang == 'ru' %}Отель:{% else %}Mehmonxona:{% endif %}</strong>
+                  <span>{% if current_lang == 'ru' %}{{ settings.hotel_name_ru }}{% else %}{{ settings.hotel_name_uz }}{% endif %}</span>
+                </div>
+                <div class="info-row">
+                  <strong><i class="fas fa-utensils" style="color: #0d9488;"></i> {% if current_lang == 'ru' %}Питание:{% else %}Taomlanish:{% endif %}</strong>
+                  <span>{% if current_lang == 'ru' %}3-х разовое диетическое питание (Шведский стол){% else %}3 mahal diet taomlar (Shved stoli){% endif %}</span>
+                </div>
+                <div class="info-row">
+                  <strong><i class="fas fa-mountain" style="color: #0d9488;"></i> {% if current_lang == 'ru' %}Экскурсии:{% else %}Ekskursiya:{% endif %}</strong>
+                  <span>{% if current_lang == 'ru' %}Гора Габала, озеро Нохур, канатная дорога Туфандаг, тур по Баку{% else %}Gabala tog'i, Nohur ko'li, Tufandag' kanat to'lovi, Baku sayohati{% endif %}</span>
+                </div>
+                <div class="info-row">
+                  <strong><i class="fas fa-user-shield" style="color: #0d9488;"></i> {% if current_lang == 'ru' %}Сопровождающий:{% else %}Yo'lboshchi:{% endif %}</strong>
+                  <span>{% if current_lang == 'ru' %}На протяжении всей поездки родителей сопровождает опытный гид{% else %}Safar davomida ota-onangiz bilan malakali yo'lboshchi birga boradi{% endif %}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             3-PUNKT: Mehmonxona, davolanish va sayohat rasmlari & videolari
+             ========================================== -->
+        <div class="accordion-item" id="acc-item-3">
+          <button class="accordion-header" type="button" aria-expanded="false" data-target="acc-body-3">
+            <div class="acc-header-left">
+              <div class="acc-icon-box" style="background: rgba(147, 51, 234, 0.12); color: #9333ea;">
+                <i class="fas fa-photo-video"></i>
+              </div>
+              <span class="acc-title">{% if current_lang == 'ru' %}Фотографии и видео отеля и санатория{% else %}Mehmonxona, davolanish va sayohat rasmlari & videolari{% endif %}</span>
+            </div>
+            <div class="acc-chevron">
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </button>
+          <div class="accordion-body" id="acc-body-3">
+            <div class="accordion-content">
+              <p style="margin-bottom: 14px; color: var(--text-muted); font-size: 13.5px;">
+                {% if current_lang == 'ru' %}
+                Ознакомьтесь с условиями 5-звездочного отеля Gashalti Health Naftalan, лечебными процедурами и красотой природы Азербайджана:
+                {% else %}
+                5* Gashalti Health Naftalan mehmonxonasi sharoitlari, davolanish muolajalari hamda Ozarbayjon bo'ylab sayohat lavhalari bilan tanishing:
+                {% endif %}
+              </p>
+
+              {% if gallery %}
+              <div class="media-gallery-grid">
+                {% for item in gallery %}
+                <div class="media-card">
+                  <div class="media-thumb-container">
+                    {% if item.media_type == 'image' and item.image %}
+                      <span class="media-badge-tag badge-image"><i class="fas fa-image"></i> {% if current_lang == 'ru' %}Фото{% else %}Rasm{% endif %}</span>
+                      <img src="{{ item.image.url }}" alt="{% if current_lang == 'ru' %}{{ item.title_ru|default:item.title_uz }}{% else %}{{ item.title_uz }}{% endif %}" class="media-thumb-img gallery-lightbox-trigger" data-title="{% if current_lang == 'ru' %}{{ item.title_ru|default:item.title_uz }}{% else %}{{ item.title_uz }}{% endif %}">
+                    {% elif item.media_type == 'video' and item.video %}
+                      <span class="media-badge-tag badge-video"><i class="fas fa-play"></i> Video</span>
+                      <video src="{{ item.video.url }}" controls playsinline preload="metadata" class="media-video-player"></video>
+                    {% elif item.media_type == 'video_url' %}
+                      <span class="media-badge-tag badge-video"><i class="fas fa-play"></i> Video</span>
+                      {% if 'youtube.com' in item.video_url or 'youtu.be' in item.video_url %}
+                        <iframe src="{{ item.video_url }}" style="width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+                      {% else %}
+                        <a href="{{ item.video_url }}" target="_blank" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; text-decoration: none; color: #fff; background: #1e293b;">
+                          <i class="fas fa-play-circle" style="font-size: 40px; color: #ef4444; margin-bottom: 6px;"></i>
+                          <span style="font-size: 12px; font-weight: 700;">{% if current_lang == 'ru' %}Смотреть видео{% else %}Videoni ko'rish{% endif %}</span>
+                        </a>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                  {% if item.title_uz or item.title_ru %}
+                  <div class="media-card-body">
+                    <h4 class="media-card-title">{% if current_lang == 'ru' %}{{ item.title_ru|default:item.title_uz }}{% else %}{{ item.title_uz }}{% endif %}</h4>
+                  </div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+              {% else %}
+              <div style="text-align: center; padding: 25px; color: var(--text-muted); font-size: 13.5px; background: #f8fafc; border-radius: var(--radius-sm);">
+                <i class="fas fa-images" style="font-size: 32px; color: var(--text-light); margin-bottom: 8px;"></i>
+                <p style="margin: 0;">{% if current_lang == 'ru' %}Медиа-файлы скоро будут добавлены.{% else %}Rasmlar va videolar tez orada yuklanadi.{% endif %}</p>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             4-PUNKT: Qanday kasalliklar uchun
+             ========================================== -->
+        <div class="accordion-item" id="acc-item-4">
+          <button class="accordion-header" type="button" aria-expanded="false" data-target="acc-body-4">
+            <div class="acc-header-left">
+              <div class="acc-icon-box" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">
+                <i class="fas fa-heartbeat"></i>
+              </div>
+              <span class="acc-title">{% if current_lang == 'ru' %}При каких заболеваниях{% else %}Qanday kasalliklar uchun{% endif %}</span>
+            </div>
+            <div class="acc-chevron">
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </button>
+          <div class="accordion-body" id="acc-body-4">
+            <div class="accordion-content">
+              <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 14px;">
+                {% if current_lang == 'ru' %}
+                В санатории Нафталан проводится лечение по следующим направлениям опытными врачами на основе современных технологий:
+                {% else %}
+                Naftalan sanatoriyasida quyidagi kasalliklar bo’yicha malakali shifokorlar va zamonaviy texnologiyalar asosida davolanish qo‘llaniladi:
+                {% endif %}
+              </p>
+              <div class="diseases-simple-list">
+                {% for disease in diseases %}
+                <div class="disease-simple-item">
+                  <div class="disease-item-icon">
+                    <i class="{{ disease.icon }}"></i>
+                  </div>
+                  <div>
+                    <h4 class="disease-item-title">{% if current_lang == 'ru' %}{{ disease.title_ru|default:disease.title_uz }}{% else %}{{ disease.title_uz }}{% endif %}</h4>
+                    {% if disease.description_uz or disease.description_ru %}
+                    <p class="disease-item-desc">{% if current_lang == 'ru' %}{{ disease.description_ru|default:disease.description_uz }}{% else %}{{ disease.description_uz }}{% endif %}</p>
+                    {% endif %}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             5-PUNKT: Narx ichiga qanday davolanish turlari kiradi
+             ========================================== -->
+        <div class="accordion-item" id="acc-item-5">
+          <button class="accordion-header" type="button" aria-expanded="false" data-target="acc-body-5">
+            <div class="acc-header-left">
+              <div class="acc-icon-box" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
+                <i class="fas fa-notes-medical"></i>
+              </div>
+              <span class="acc-title">{% if current_lang == 'ru' %}Какие виды лечения входят в стоимость{% else %}Narx ichiga qanday davolanish turlari kiradi{% endif %}</span>
+            </div>
+            <div class="acc-chevron">
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </button>
+          <div class="accordion-body" id="acc-body-5">
+            <div class="accordion-content">
+              {% for category in categories %}
+              <div class="treatment-group-box">
+                <h4 class="treatment-group-title">
+                  <i class="{{ category.icon }}"></i> {% if current_lang == 'ru' %}{{ category.title_ru|default:category.title_uz }}{% else %}{{ category.title_uz }}{% endif %}
+                </h4>
+                <div class="treatment-items-wrap">
+                  {% for item in category.items.all %}
+                  <div class="treatment-pill">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{% if current_lang == 'ru' %}{{ item.name_ru|default:item.name_uz }}{% else %}{{ item.name_uz }}{% endif %}</span>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             6-PUNKT: Operator bilan bog'lanish
+             ========================================== -->
+        <div class="accordion-item active-default" id="acc-item-6">
+          <button class="accordion-header active-default" type="button" aria-expanded="true" data-target="acc-body-6">
+            <div class="acc-header-left">
+              <div class="acc-icon-box" style="background: rgba(220, 38, 38, 0.12); color: #dc2626;">
+                <i class="fas fa-headset"></i>
+              </div>
+              <span class="acc-title" style="color: #0f766e; font-weight: 800;">{% if current_lang == 'ru' %}Связаться с оператором{% else %}Operator bilan bog'lanish{% endif %}</span>
+            </div>
+            <div class="acc-chevron">
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </button>
+          <div class="accordion-body" id="acc-body-6">
+            <div class="accordion-content">
+              
+              <!-- 5 Contact Action Icons: Phone 1, Phone 2, Telegram, Instagram, Location -->
+              <div class="quick-contact-icons-grid">
+                <a href="tel:{{ settings.phone_number }}" class="contact-icon-btn btn-call-icon" title="{% if current_lang == 'ru' %}Позвонить ({{ settings.phone_number }}){% else %}Telefon qilish ({{ settings.phone_number }}){% endif %}">
+                  <div class="icon-circle">
+                    <i class="fas fa-phone-alt"></i>
+                  </div>
+                  <span>{% if current_lang == 'ru' %}Тел 1{% else %}Telefon 1{% endif %}</span>
+                </a>
+
+                {% if settings.phone_number_2 %}
+                <a href="tel:{{ settings.phone_number_2 }}" class="contact-icon-btn btn-call-icon-2" title="{% if current_lang == 'ru' %}Позвонить ({{ settings.phone_number_2 }}){% else %}Telefon qilish ({{ settings.phone_number_2 }}){% endif %}">
+                  <div class="icon-circle">
+                    <i class="fas fa-phone-volume"></i>
+                  </div>
+                  <span>{% if current_lang == 'ru' %}Тел 2{% else %}Telefon 2{% endif %}</span>
+                </a>
+                {% endif %}
+
+                {% if settings.telegram_url %}
+                <a href="{{ settings.telegram_url }}" target="_blank" class="contact-icon-btn btn-tg-icon" title="Telegram">
+                  <div class="icon-circle">
+                    <i class="fab fa-telegram-plane"></i>
+                  </div>
+                  <span>Telegram</span>
+                </a>
+                {% endif %}
+
+                {% if settings.instagram_url %}
+                <a href="{{ settings.instagram_url }}" target="_blank" class="contact-icon-btn btn-insta-icon" title="Instagram">
+                  <div class="icon-circle">
+                    <i class="fab fa-instagram"></i>
+                  </div>
+                  <span>Instagram</span>
+                </a>
+                {% endif %}
+
+                {% if settings.location_url %}
+                <a href="{{ settings.location_url }}" target="_blank" class="contact-icon-btn btn-loc-icon" title="{% if current_lang == 'ru' %}Локация на карте{% else %}Manzil / Lokatsiya{% endif %}">
+                  <div class="icon-circle">
+                    <i class="fas fa-map-marker-alt"></i>
+                  </div>
+                  <span>{% if current_lang == 'ru' %}Локация{% else %}Lokatsiya{% endif %}</span>
+                </a>
+                {% endif %}
+              </div>
+
+              <div style="text-align: center; margin: 18px 0 14px; position: relative;">
+                <span
+                  style="background: #ffffff; padding: 0 12px; color: var(--text-muted); font-size: 13px; position: relative; z-index: 1;">
+                  {% if current_lang == 'ru' %}или заполните форму:{% else %}yoki formani to'ldiring:{% endif %}
+                </span>
+                <hr
+                  style="position: absolute; top: 50%; width: 100%; border: 0; border-top: 1px solid var(--border); margin: 0; z-index: 0;">
+              </div>
+
+              <!-- Small Lead Form -->
+              <form action="{% url 'submit_lead' %}" method="POST" class="ajax-lead-form simple-form"
+                id="accordion-lead-form">
+                {% csrf_token %}
+                <input type="hidden" name="source" value="accordion_form">
+
+                <div class="form-group">
+                  <label class="form-label" for="acc_lead_name">
+                    <i class="fas fa-user"></i> {% if current_lang == 'ru' %}Ваше имя:{% else %}Ismingiz:{% endif %}
+                  </label>
+                  <input type="text" name="name" id="acc_lead_name" class="form-input"
+                    placeholder="{% if current_lang == 'ru' %}Введите ваше имя...{% else %}Ismingizni kiriting...{% endif %}" required>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="acc_lead_phone">
+                    <i class="fas fa-phone"></i> {% if current_lang == 'ru' %}Номер телефона:{% else %}Telefon raqamingiz:{% endif %}
+                  </label>
+                  <input type="tel" name="phone" id="acc_lead_phone" class="form-input"
+                    placeholder="+998 (__) ___-__-__" required>
+                </div>
+
+                <button type="submit" class="btn-submit-main" id="acc-submit-btn">
+                  <i class="fas fa-paper-plane"></i> {% if current_lang == 'ru' %}Связаться с оператором{% else %}Operator bilan bog'lanish{% endif %}
+                </button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer Note -->
+    <footer class="simple-footer">
+      <p>&copy; 2026 Masuf Travel. Naftalan Health & Travel.</p>
+      <div style="margin-top: 6px;">
+        <a href="{% url 'dashboard_login' %}" style="color: var(--text-light); font-size: 12px; text-decoration: none;">
+          <i class="fas fa-lock"></i> {% if current_lang == 'ru' %}Панель Менеджера{% else %}Menejer Paneli{% endif %}
+        </a>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Image Lightbox Modal -->
+  <div class="image-lightbox-modal" id="imageLightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" id="lightboxClose">&times;</button>
+      <img src="" alt="" id="lightboxImg">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript -->
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

@@ -1,12 +1,33 @@
+# Python & Virtualenv
 venv/
 .venv/
+env/
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Django
 db.sqlite3
 db.sqlite3-journal
-media/
+*.sqlite3
 staticfiles/
-.vscode/
+media/
 *.log
+
+# Environment variables
+.env
+.env.*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Large media & references
+*.mp4
+*.mkv
+*.mov
+.DS_Store
